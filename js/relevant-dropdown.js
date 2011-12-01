@@ -5,7 +5,8 @@ jQuery.expr[':'].contains = function(a, i, m) {
 
 $(function() {
 	
-	if (!Modernizr.input.list) {
+	// Crappy browser sniffing part for Safari, which reports that it works but does not
+	if (!Modernizr.input.list || (parseInt($.browser.version) > 400)) {
 
 		var doc = $(document);
 	
