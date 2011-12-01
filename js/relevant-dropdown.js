@@ -29,7 +29,7 @@ $(function() {
 		// Fill new fake datalist
 		datalistItems.each(function() {
 			$("<li />", {
-				"text": $(this).text()
+				"text": $(this).val()
 			}).appendTo($datalist);
 		});
 		
