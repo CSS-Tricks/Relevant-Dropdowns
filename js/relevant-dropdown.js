@@ -106,7 +106,7 @@ $(function() {
 						nextAll.eq(0).addClass("active");
 					}
 				} else {
-					$datalist.find("li:first").addClass("active");
+					$datalist.find("li:visible:first").addClass("active");
 				}
 			} 
 			// return key
