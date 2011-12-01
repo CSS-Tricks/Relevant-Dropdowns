@@ -53,9 +53,12 @@ $(function() {
     				
     		})
     		.on("blur", "#search", function(){
-    		    
+    		  
+					// If this fires immediately, it prevents click-to-select from working
+					setTimeout(function() {
 		        $datalist.fadeOut();
-			    datalistItems.removeClass("active"); 
+			    	datalistItems.removeClass("active"); 
+					}, 500);
 			    			    
 		    });
 		
@@ -105,16 +108,16 @@ $(function() {
 				if (active.length) {
 					$searchInput.val(active.text());
 				}
-        		$datalist.fadeOut();
-    			datalistItems.removeClass("active");
+        $datalist.fadeOut();
+    		datalistItems.removeClass("active");
 			}
 			
 		});
 		
 		// When choosing from dropdown
-		// TODO work with return key too
 		datalistItems.on("click", function() {
 			var active = $("li.active");
+			console.log(active);
 			if (active.length) {
 				$searchInput.val($(this).text());
 			}
