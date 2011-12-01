@@ -2,18 +2,18 @@
 
 ##A HTML5 datalist polyfill that depends on jQuery and Modernizr.
 
-Datalist browser support (Dec 2011) is Firefox 4+ and Opera 10.5+ (or therebouts). Maybe IE 10 too. It's reasonable that you'd want WebKit support. So. This.
+Datalist browser support (Dec 2011) is Firefox 4+, Opera 10.6+, and IE 10. It's reasonable that you'd want WebKit support. So. This.
 
 ###Usage
 
-Markup like this:
+Markup like this. IMPORTANT, use value attribute not text.
 
 ```
 <input type="search" list="states" placeholder="Find U.S. State">
 
 <datalist id="states">
-	<option>Alabama</option>
-  <option>Alaska</option>
+	<option value="Alabama">
+	<option value="Alaska">
   <!-- all states -->
 </datalist>
 ```
@@ -31,5 +31,5 @@ On Line 12 of the relevant-dropdown.js file you can change the ID to your own se
 ###TODO
 
 - Make better
-- Move position of dropdown when window resized
 - Plugize / work on multiple inputs
+- Better IE styling

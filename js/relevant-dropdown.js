@@ -4,14 +4,13 @@ jQuery.expr[':'].contains = function(a, i, m) {
 };
 
 $(function() {
-	
-	// Crappy browser sniffing part for Safari, which reports that it works but does not
+		
 	if (!Modernizr.input.list || (parseInt($.browser.version) > 400)) {
 
 		var doc = $(document);
 	
 		var $searchInput = $("#search");
-		var searchPosition = $searchInput.position();
+		var searchPosition;
 		var $datalist = $("#" + $searchInput.attr("list"));
 		var datalistItems = $datalist.find("option");
 		
@@ -40,6 +39,8 @@ $(function() {
 		// Typey type type
 		doc
 		    .on("keyup focus", "#search", function(e) {
+		    
+		    	searchPosition = $searchInput.position();
 		        								
     			$datalist
     					.show()
@@ -71,9 +72,14 @@ $(function() {
 			$(this).removeClass("active");
 		});
 	
-		// TODO
 		$(window).resize(function() {
-			// Move it
+			searchPosition = $searchInput.position();
+			$datalist
+				.css({
+					top: searchPosition.top + $(this).outerHeight(),
+					left: searchPosition.left,
+					width: $searchInput.outerWidth()
+				});
 		});
 		
 		// Watch arrow keys for up and down
