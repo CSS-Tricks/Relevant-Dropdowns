@@ -117,7 +117,6 @@ $(function() {
 		// When choosing from dropdown
 		datalistItems.on("click", function() {
 			var active = $("li.active");
-			console.log(active);
 			if (active.length) {
 				$searchInput.val($(this).text());
 			}
