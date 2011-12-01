@@ -9,6 +9,7 @@
 	padding: 0; 
 }
 body { 
+	font: 14px/1.4 Georgia, Serif;
 	background: #999; 
 }
 
@@ -25,12 +26,19 @@ h1, h2 {
 	letter-spacing: -2px;
 }
 h2 {
-	font-size: 34px;
-	margin-bottom: 10px;
-	margin-top: 40px;
+	font-size: 24px;
+	margin: 40px -50px 40px;
+	padding: 10px 50px;
+	letter-spacing: -1px;
+	background: #ffcc00;
 }
+p {
+	margin: 0 0 40px 0;
+}
+p:last-child { margin-bottom: 0; }
+
 input {
-	font: 12px "Lucida Grande", Sans-Serif;
+	font: 16px "Lucida Grande", Sans-Serif;
 }
 .datalist {
 	list-style: none;
@@ -48,9 +56,9 @@ input {
 }
 .datalist li {
 	padding: 3px;
-	font: 12px "Lucida Grande", Sans-Serif;
+	font: 13px "Lucida Grande", Sans-Serif;
 }
-.datalist li:hover {
+.datalist li.active {
 	background: #3875d7;
 	color: white;
 }
