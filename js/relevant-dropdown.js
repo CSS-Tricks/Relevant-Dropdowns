@@ -37,25 +37,27 @@ $(function() {
 		var datalistItems = $datalist.find("li");
 	
 		// Typey type type
-		doc.on("keyup", "#search", function(e) {
-								
-			$datalist
-					.show()
-					.css({
-						top: searchPosition.top + $(this).outerHeight(),
-						left: searchPosition.left,
-						width: $searchInput.outerWidth()
-					})
-					.mouseleave(function() {
-						$datalist.fadeOut();
-						datalistItems.removeClass("active");
-					});
+		doc
+		    .on("keyup focus", "#search", function(e) {
+		        								
+    			$datalist
+    					.show()
+    					.css({
+    						top: searchPosition.top + $(this).outerHeight(),
+    						left: searchPosition.left,
+    						width: $searchInput.outerWidth()
+    					});
 				
-			datalistItems.hide();
-		
-			$datalist.find("li:contains('" + $searchInput.val() + "')").show();
-	
-		});
+    			datalistItems.hide();		
+    			$datalist.find("li:contains('" + $searchInput.val() + "')").show();
+    				
+    		})
+    		.on("blur", "#search", function(){
+    		    
+		        $datalist.fadeOut();
+			    datalistItems.removeClass("active"); 
+			    			    
+		    });
 		
 		// Don't want to use :hover in CSS so doing this instead
 		datalistItems.on("mouseenter", function() {
@@ -71,7 +73,7 @@ $(function() {
 		});
 		
 		// Watch arrow keys for up and down
-		doc.on("keydown", function(e) {	
+		doc.on("keydown", "#search", function(e) {	
 						
 			var active = $("li.active");
 			
@@ -103,6 +105,8 @@ $(function() {
 				if (active.length) {
 					$searchInput.val(active.text());
 				}
+        		$datalist.fadeOut();
+    			datalistItems.removeClass("active");
 			}
 			
 		});
@@ -114,8 +118,9 @@ $(function() {
 			if (active.length) {
 				$searchInput.val($(this).text());
 			}
+			$datalist.fadeOut();
+			datalistItems.removeClass("active");
 		});
-	
 	}
 
 });
