@@ -13,6 +13,7 @@ $(function() {
 		var searchPosition;
 		var $datalist = $("#" + $searchInput.attr("list"));
 		var datalistItems = $datalist.find("option");
+		var scrollValue = 0;
 		
 		// Insert home for new fake datalist
 		$("<ul />", {
@@ -38,40 +39,45 @@ $(function() {
 	
 		// Typey type type
 		doc
-		    .on("keyup focus", "#search", function(e) {
-		    
-		    	searchPosition = $searchInput.position();
-		        								
-    			$datalist
-    					.show()
-    					.css({
-    						top: searchPosition.top + $(this).outerHeight(),
-    						left: searchPosition.left,
-    						width: $searchInput.outerWidth()
-    					});
-				
-    			datalistItems.hide();		
-    			$datalist.find("li:contains('" + $searchInput.val() + "')").show();
-    				
-    		})
+		    .on("focus", "#search", function(){   					
+				// Reset scroll				
+				$datalist.scrollTop(0);    					
+			    scrollValue = 0;
+    		})    		
     		.on("blur", "#search", function(){
-    		  
-					// If this fires immediately, it prevents click-to-select from working
-					setTimeout(function() {
-		        $datalist.fadeOut();
+    		    // If this fires immediately, it prevents click-to-select from working
+			    setTimeout(function() {
+		            $datalist.fadeOut();
 			    	datalistItems.removeClass("active"); 
-					}, 500);
+				}, 500);
 			    			    
-		    });
+		    })
+		    .on("keyup focus", "#search", function(e) {
+		        searchPosition = $searchInput.position();
+	        			
+	        	// Build datalist							
+			    $datalist
+    				.show()
+					.css({
+						top: searchPosition.top + $(this).outerHeight(),
+						left: searchPosition.left,
+						width: $searchInput.outerWidth(),
+						height: datalistItems.outerHeight() * 6
+					});
+				
+    			datalistItems.hide();
+    			$datalist.find("li:contains('" + $searchInput.val() + "')").show();    				
+    		});
 		
 		// Don't want to use :hover in CSS so doing this instead
 		datalistItems.on("mouseenter", function() {
-			$(this).addClass("active");
+			$(this).addClass("active").siblings().removeClass("active");
 		});
 		datalistItems.on("mouseleave", function() {
-			$(this).removeClass("active");
+		    $(this).removeClass("active");
 		});
 	
+	    // Window resize
 		$(window).resize(function() {
 			searchPosition = $searchInput.position();
 			$datalist
@@ -80,43 +86,67 @@ $(function() {
 					left: searchPosition.left,
 					width: $searchInput.outerWidth()
 				});
-		});
+		});		
 		
 		// Watch arrow keys for up and down
 		doc.on("keydown", "#search", function(e) {	
 						
 			var active = $("li.active");
+    		var datalistHeight = $datalist.outerHeight();
+    		var datalistItemsHeight = datalistItems.outerHeight();
 			
 			// up arrow		
-			if (e.keyCode == 38) {
+			if ( e.keyCode == 38 ) {
 				if (active.length) {
 					prevAll = active.prevAll("li:visible");
 					if (prevAll.length > 0) {
 						active.removeClass("active");
 						prevAll.eq(0).addClass("active");
-					}
+					}            
+                    
+                    if ( active.prevAll(":visible").position().top < 0 && scrollValue > 0 ){
+                        $datalist.scrollTop(scrollValue-=datalistItemsHeight);                        
+                    }                    
 				}
 			}
+			
 			// down arrow
-			if (e.keyCode == 40) {
+			if ( e.keyCode == 40 ) {
 				if (active.length) {
 					var nextAll = active.nextAll("li:visible");
 					if (nextAll.length > 0) {
 						active.removeClass("active");
 						nextAll.eq(0).addClass("active");
-					}
-				} else {
-					$datalist.find("li:visible:first").addClass("active");
-				}
-			} 
-			// return key
-			if (e.keyCode == 13) {
+					}                 
+                    
+                    if ( active.nextAll(":visible").position().top == datalistHeight ){
+                        $datalist.scrollTop(scrollValue+=datalistItemsHeight);                      
+                    }                    
+				} else {			    
+			        datalistItems.removeClass("active");
+				    $datalist.find("li:visible:first").addClass("active");	
+				}		    
+			}
+			
+			// return or tab key
+			if ( e.keyCode == 13 || e.keyCode == 9 ) {
 				var active = $("li.active");
 				if (active.length) {
 					$searchInput.val(active.text());
 				}
-        $datalist.fadeOut();
-    		datalistItems.removeClass("active");
+                $datalist.fadeOut();
+    		    datalistItems.removeClass("active");
+			}
+				
+			// keys
+			if ( e.keyCode != 13 && e.keyCode != 38 && e.keyCode != 40 ){
+			    // Reset active class
+			    datalistItems.removeClass("active");
+				$datalist.find("li:visible:first").addClass("active");
+				
+				// Reset scroll
+			    $datalist.scrollTop(0);	
+			    scrollValue = 0;		    
 			}
 			
 		});
