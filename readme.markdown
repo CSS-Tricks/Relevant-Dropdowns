@@ -33,3 +33,4 @@ On Line 12 of the relevant-dropdown.js file you can change the ID to your own se
 - Make better
 - Plugize / work on multiple inputs
 - Better IE styling
+- Might be able to remove Modernizr and just test for support of list attribute in element

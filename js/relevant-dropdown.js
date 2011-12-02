@@ -61,8 +61,7 @@ $(function() {
 					.css({
 						top: searchPosition.top + $(this).outerHeight(),
 						left: searchPosition.left,
-						width: $searchInput.outerWidth(),
-						height: datalistItems.outerHeight() * 6
+						width: $searchInput.outerWidth()
 					});
 				
     			datalistItems.hide();
