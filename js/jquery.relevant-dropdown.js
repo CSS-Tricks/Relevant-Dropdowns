@@ -17,7 +17,8 @@
     return this.each(function() {
             
       var $input = $(this),
-      		$datalist = $("#" + $input.attr("list")),
+          list_id = $input.attr('list'),
+      		$datalist = $("#" + list_id),
       		datalistItems = $datalist.find("option"),
       		
       		searchPosition,
@@ -30,14 +31,14 @@
       	// Insert home for new fake datalist
     		$("<ul />", {
     			"class": "datalist",
-    			"id"   : $input.attr("list")
+    			"id"   : list_id
     		}).appendTo("body");
 
     		// Remove old datalist
     		$datalist.remove();
 
     		// Update pointer
-    		var $datalist = $("#" + $input.attr("list"));
+    		var $datalist = $("#" + list_id);
 
     		// Fill new fake datalist
     		datalistItems.each(function() {
