@@ -16,8 +16,7 @@
     
     return this.each(function() {
             
-      var doc = $(document),
-          $input = $(this),
+      var $input = $(this),
       		$datalist = $("#" + $input.attr("list")),
       		datalistItems = $datalist.find("option"),
       		
