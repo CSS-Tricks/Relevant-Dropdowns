@@ -26,6 +26,8 @@ You'll need the scripts:
 <script src="js/relevant-dropdown.js"></script>
 ```
 
+On Lines `[12, 42, 47, 55, 91]` of the relevant-dropdown.js file you can change the ID to your own search input's ID.
+
 ### Using the Plugin
 
 Markup
@@ -58,11 +60,8 @@ Using the Plugin
 </script>
 ```
 
-On Line 12 of the relevant-dropdown.js file you can change the ID to your own search input's ID.
-
 ###TODO
 
 - Make better
-- Plugize / work on multiple inputs
 - Better IE styling
 - Might be able to remove Modernizr and just test for support of list attribute in element
