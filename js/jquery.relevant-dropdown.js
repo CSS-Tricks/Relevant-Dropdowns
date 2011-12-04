@@ -53,17 +53,17 @@
     		// Typey type type
     		$input
     		    .on("focus", function(){   					
-    				// Reset scroll				
-    				$datalist.scrollTop(0);    					
-    			    scrollValue = 0;
+      				// Reset scroll				
+      				$datalist.scrollTop(0);    					
+      			    scrollValue = 0;
         		})    		
         		.on("blur", function(){
-        		    // If this fires immediately, it prevents click-to-select from working
+        		  
+      		    // If this fires immediately, it prevents click-to-select from working
     			    setTimeout(function() {
-    		            $datalist.fadeOut(options.fadeOutSpeed);
+    		        $datalist.fadeOut(options.fadeOutSpeed);
     			    	datalistItems.removeClass("active"); 
-    				}, 500);
-
+    				  }, 500);
     		    })
     		    .on("keyup focus", function(e) {
     		        searchPosition = $input.position();
@@ -82,12 +82,13 @@
         		});
 
     		// Don't want to use :hover in CSS so doing this instead
-    		datalistItems.on("mouseenter", function() {
-    			$(this).addClass("active").siblings().removeClass("active");
-    		});
-    		datalistItems.on("mouseleave", function() {
-    		    $(this).removeClass("active");
-    		});
+    		datalistItems
+    		  .on("mouseenter", function() {
+      			$(this).addClass("active").siblings().removeClass("active");
+      		})
+      		.on("mouseleave", function() {
+      		    $(this).removeClass("active");
+      		});
 
     	    // Window resize
     		$(window).resize(function() {
@@ -103,9 +104,9 @@
     		// Watch arrow keys for up and down
     		$input.on("keydown", function(e) {	
 
-    			var active = $("li.active");
-        		var datalistHeight = $datalist.outerHeight();
-        		var datalistItemsHeight = datalistItems.outerHeight();
+    			var active = $("li.active"),
+        		  datalistHeight = $datalist.outerHeight(),
+        		  datalistItemsHeight = datalistItems.outerHeight();
 
     			// up arrow		
     			if ( e.keyCode == 38 ) {
@@ -116,9 +117,9 @@
     						prevAll.eq(0).addClass("active");
     					}            
 
-                        if ( active.prevAll(":visible").position().top < 0 && scrollValue > 0 ){
-                            $datalist.scrollTop(scrollValue-=datalistItemsHeight);                        
-                        }                    
+              if ( active.prevAll(":visible").position().top < 0 && scrollValue > 0 ){
+                  $datalist.scrollTop(scrollValue-=datalistItemsHeight);                        
+              }                    
     				}
     			}
 
@@ -131,9 +132,9 @@
     						nextAll.eq(0).addClass("active");
     					}                 
 
-                        if ( active.nextAll(":visible").position().top == datalistHeight ){
-                            $datalist.scrollTop(scrollValue+=datalistItemsHeight);                      
-                        }                    
+              if ( active.nextAll(":visible").position().top == datalistHeight ){
+                  $datalist.scrollTop(scrollValue+=datalistItemsHeight);                      
+              }                    
     				} else {			    
     			        datalistItems.removeClass("active");
     				    $datalist.find("li:visible:first").addClass("active");	
@@ -146,19 +147,19 @@
     				if (active.length) {
     					$input.val(active.text());
     				}
-                    $datalist.fadeOut(options.fadeOutSpeed);
-        		    datalistItems.removeClass("active");
+            $datalist.fadeOut(options.fadeOutSpeed);
+    		    datalistItems.removeClass("active");
     			}
 
     			// keys
     			if ( e.keyCode != 13 && e.keyCode != 38 && e.keyCode != 40 ){
-    			    // Reset active class
-    			    datalistItems.removeClass("active");
+  			    // Reset active class
+  			    datalistItems.removeClass("active");
     				$datalist.find("li:visible:first").addClass("active");
 
     				// Reset scroll
-    			    $datalist.scrollTop(0);	
-    			    scrollValue = 0;		    
+  			    $datalist.scrollTop(0);	
+  			    scrollValue = 0;		    
     			}
 
     		});
@@ -173,8 +174,7 @@
     			datalistItems.removeClass("active");
     		});
   		
-		  }
-      
+		  } // end if
     });
   };
   
