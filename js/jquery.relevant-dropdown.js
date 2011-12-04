@@ -17,8 +17,8 @@
     return this.each(function() {
             
       var doc = $(document),
-          $searchInput = $(this),
-      		$datalist = $("#" + $searchInput.attr("list")),
+          $input = $(this),
+      		$datalist = $("#" + $input.attr("list")),
       		datalistItems = $datalist.find("option"),
       		
       		searchPosition,
@@ -31,14 +31,14 @@
       	// Insert home for new fake datalist
     		$("<ul />", {
     			"class": "datalist",
-    			"id"   : $searchInput.attr("list")
+    			"id"   : $input.attr("list")
     		}).appendTo("body");
 
     		// Remove old datalist
     		$datalist.remove();
 
     		// Update pointer
-    		var $datalist = $("#" + $searchInput.attr("list"));
+    		var $datalist = $("#" + $input.attr("list"));
 
     		// Fill new fake datalist
     		datalistItems.each(function() {
@@ -51,7 +51,7 @@
     		var datalistItems = $datalist.find("li");
 
     		// Typey type type
-    		$searchInput
+    		$input
     		    .on("focus", function(){   					
     				// Reset scroll				
     				$datalist.scrollTop(0);    					
@@ -66,7 +66,7 @@
 
     		    })
     		    .on("keyup focus", function(e) {
-    		        searchPosition = $searchInput.position();
+    		        searchPosition = $input.position();
 
     	        	// Build datalist							
     			    $datalist
@@ -74,11 +74,11 @@
     					.css({
     						top: searchPosition.top + $(this).outerHeight(),
     						left: searchPosition.left,
-    						width: $searchInput.outerWidth()
+    						width: $input.outerWidth()
     					});
 
         			datalistItems.hide();
-        			$datalist.find("li:RD_contains('" + $searchInput.val() + "')").show();    				
+        			$datalist.find("li:RD_contains('" + $input.val() + "')").show();    				
         		});
 
     		// Don't want to use :hover in CSS so doing this instead
@@ -91,17 +91,17 @@
 
     	    // Window resize
     		$(window).resize(function() {
-    			searchPosition = $searchInput.position();
+    			searchPosition = $input.position();
     			$datalist
     				.css({
     					top: searchPosition.top + $(this).outerHeight(),
     					left: searchPosition.left,
-    					width: $searchInput.outerWidth()
+    					width: $input.outerWidth()
     				});
     		});		
 
     		// Watch arrow keys for up and down
-    		$searchInput.on("keydown", function(e) {	
+    		$input.on("keydown", function(e) {	
 
     			var active = $("li.active");
         		var datalistHeight = $datalist.outerHeight();
@@ -144,7 +144,7 @@
     			if ( e.keyCode == 13 || e.keyCode == 9 ) {
     				var active = $("li.active");
     				if (active.length) {
-    					$searchInput.val(active.text());
+    					$input.val(active.text());
     				}
                     $datalist.fadeOut(options.fadeOutSpeed);
         		    datalistItems.removeClass("active");
@@ -167,7 +167,7 @@
     		datalistItems.on("click", function() {
     			var active = $("li.active");
     			if (active.length) {
-    				$searchInput.val($(this).text());
+    				$input.val($(this).text());
     			}
     			$datalist.fadeOut(options.fadeOutSpeed);
     			datalistItems.removeClass("active");
