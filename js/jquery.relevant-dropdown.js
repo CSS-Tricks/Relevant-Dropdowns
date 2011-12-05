@@ -115,8 +115,8 @@
                 active.removeClass("active");
                 prevAll.eq(0).addClass("active");
               }            
-              
-              if ( prevAll.position().top < 0 && scrollValue > 0 ){
+
+              if ( active.prevAll(":visible").position().top < 0 && scrollValue > 0 ){
                 $datalist.scrollTop(scrollValue-=datalistItemsHeight);                        
               }                    
             }
@@ -130,11 +130,9 @@
                 active.removeClass("active");
                 nextAll.eq(0).addClass("active");
               }                 
-              
-              if ( (nextAll.position().top + datalistItemsHeight) >= datalistHeight ){
-                $datalist.stop().animate({
-                  scrollTop: scrollValue += datalistItemsHeight
-                }, 200);
+
+              if ( active.nextAll(":visible").position().top == datalistHeight ){
+                $datalist.scrollTop(scrollValue+=datalistItemsHeight);                      
               }                    
             } else {			    
               datalistItems.removeClass("active");
