@@ -55,7 +55,10 @@ Using the Plugin
 ```
 <script>
     $('#names').relevantDropdown({
-        fadeOutSpeed: 'normal' // optional, default: 'normal'
+        fadeOutSpeed: 'normal', // optional, default: 'normal'
+        change: function(new_text) {
+            console.log('the new value is: ', new_text);
+        }
     });
 </script>
 ```
