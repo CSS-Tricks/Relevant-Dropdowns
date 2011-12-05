@@ -116,7 +116,7 @@
                 prevAll.eq(0).addClass("active");
               }            
               
-              if ( prevAll.position().top < 0 && scrollValue > 0 ){
+              if ( prevAll.length && prevAll.position().top < 0 && scrollValue > 0 ){
                 $datalist.scrollTop(scrollValue-=datalistItemsHeight);                        
               }                    
             }
@@ -131,7 +131,7 @@
                 nextAll.eq(0).addClass("active");
               }                 
               
-              if ( (nextAll.position().top + datalistItemsHeight) >= datalistHeight ){
+              if ( nextAll.length && (nextAll.position().top + datalistItemsHeight) >= datalistHeight ){
                 $datalist.stop().animate({
                   scrollTop: scrollValue += datalistItemsHeight
                 }, 200);
