@@ -35,7 +35,7 @@ $(function() {
 		});
 		
 		// Update pointer
-		var datalistItems = $datalist.find("li");
+		datalistItems = $datalist.find("li");
 	
 		// Typey type type
 		doc
