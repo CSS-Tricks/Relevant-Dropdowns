@@ -9,7 +9,8 @@
   $.fn.relevantDropdown = function(options) {
 
     options = $.extend({
-      fadeOutSpeed: 'normal' // speed to fade out the dataList Popup
+      fadeOutSpeed: 'normal', // speed to fade out the dataList Popup
+      change: null
     }, options);
 
     return this.each(function() {
@@ -146,6 +147,7 @@
           if ( e.keyCode == 13 || e.keyCode == 9 ) {
             if (active.length) {
               $input.val(active.text());
+              item_selected(active.text());
             }
             $datalist.fadeOut(options.fadeOutSpeed);
             datalistItems.removeClass("active");
@@ -172,7 +174,13 @@
           }
           $datalist.fadeOut(options.fadeOutSpeed);
           datalistItems.removeClass("active");
+          item_selected($(this).text());
         });
+        
+        function item_selected(new_text) {
+          if( typeof options.change === 'function' )
+            options.change.call(this, new_text);
+        }
 
       } // end if
     });
