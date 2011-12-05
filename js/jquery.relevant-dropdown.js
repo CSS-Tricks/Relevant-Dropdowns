@@ -80,6 +80,7 @@
           });
 
         // Don't want to use :hover in CSS so doing this instead
+        // really helps with arrow key navigation
         datalistItems
           .on("mouseenter", function() {
             $(this).addClass("active").siblings().removeClass("active");
