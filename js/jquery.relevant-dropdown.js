@@ -103,8 +103,8 @@
         $input.on("keydown", function(e) {	
 
           var active = $("li.active"),
-          datalistHeight = $datalist.outerHeight(),
-          datalistItemsHeight = datalistItems.outerHeight();
+              datalistHeight = $datalist.outerHeight(),
+              datalistItemsHeight = datalistItems.outerHeight();
 
           // up arrow		
           if ( e.keyCode == 38 ) {
