@@ -7,10 +7,6 @@
 	<title>Relevant Dropdown</title>
 	
 	<link rel='stylesheet' href='css/style.css'>
-	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script src="js/modernizr.custom.50983.js"></script>
-	<script src="js/relevant-dropdown.js"></script>
 </head>
 
 <body>
@@ -78,10 +74,28 @@
 
 		</datalist>
 		
+		<p><input type="text" id="name" list="names" placeholder="Look for someone!"></p>
+		
+		<datalist id="names">
+		  <option value="Baylor Rae'">
+		  <option value="Chris Coyier">
+		</datalist>
+		
 		<p><a href="https://github.com/chriscoyier/Relevant-Dropdowns">GitHub</a></p>
 		
 	</div>
 	
+	<script src="js/jquery.js"></script>
+	<script src="js/modernizr.custom.50983.js"></script>
+	<script src="js/jquery.relevant-dropdown.js"></script>
+	<script>
+	  
+    $('#search').relevantDropdown();
+    
+    $('#name').relevantDropdown({
+      fadeOutSpeed: 0
+    });
+	  
+	</script>
 </body>
-
 </html>

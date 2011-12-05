@@ -6,13 +6,11 @@
     return $(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0; 
   };
 
-
   $.fn.relevantDropdown = function(options) {
 
     options = $.extend({
       fadeOutSpeed: 'normal' // speed to fade out the dataList Popup
     }, options);
-
 
     return this.each(function() {
 
@@ -63,8 +61,8 @@
           setTimeout(function() {
             $datalist.fadeOut(options.fadeOutSpeed);
             datalistItems.removeClass("active"); 
-            }, 500);
-          })
+          }, 500);
+        })
         .on("keyup focus", function(e) {
           searchPosition = $input.position();
 
