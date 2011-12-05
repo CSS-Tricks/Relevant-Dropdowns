@@ -50,34 +50,34 @@
 
         // Typey type type
         $input
-        .on("focus", function() {   					
-          // Reset scroll				
-          $datalist.scrollTop(0);    					
-          scrollValue = 0;
-        })    		
-        .on("blur", function() {
+          .on("focus", function() {   					
+            // Reset scroll				
+            $datalist.scrollTop(0);    					
+            scrollValue = 0;
+          })    		
+          .on("blur", function() {
 
-          // If this fires immediately, it prevents click-to-select from working
-          setTimeout(function() {
-            $datalist.fadeOut(options.fadeOutSpeed);
-            datalistItems.removeClass("active"); 
-          }, 500);
-        })
-        .on("keyup focus", function(e) {
-          searchPosition = $input.position();
+            // If this fires immediately, it prevents click-to-select from working
+            setTimeout(function() {
+              $datalist.fadeOut(options.fadeOutSpeed);
+              datalistItems.removeClass("active"); 
+            }, 500);
+          })
+          .on("keyup focus", function(e) {
+            searchPosition = $input.position();
 
-          // Build datalist							
-          $datalist
-            .show()
-            .css({
-              top: searchPosition.top + $(this).outerHeight(),
-              left: searchPosition.left,
-              width: $input.outerWidth()
-            });
+            // Build datalist							
+            $datalist
+              .show()
+              .css({
+                top: searchPosition.top + $(this).outerHeight(),
+                left: searchPosition.left,
+                width: $input.outerWidth()
+              });
 
-          datalistItems.hide();
-          $datalist.find("li:RD_contains('" + $input.val() + "')").show();    				
-        });
+            datalistItems.hide();
+            $datalist.find("li:RD_contains('" + $input.val() + "')").show();    				
+          });
 
         // Don't want to use :hover in CSS so doing this instead
         datalistItems
