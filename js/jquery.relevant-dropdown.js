@@ -142,7 +142,6 @@
 
           // return or tab key
           if ( e.keyCode == 13 || e.keyCode == 9 ) {
-            var active = $("li.active");
             if (active.length) {
               $input.val(active.text());
             }
