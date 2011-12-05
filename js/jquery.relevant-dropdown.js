@@ -102,75 +102,75 @@
         // Watch arrow keys for up and down
         $input.on("keydown", function(e) {	
 
-        var active = $("li.active"),
-        datalistHeight = $datalist.outerHeight(),
-        datalistItemsHeight = datalistItems.outerHeight();
+          var active = $("li.active"),
+          datalistHeight = $datalist.outerHeight(),
+          datalistItemsHeight = datalistItems.outerHeight();
 
-        // up arrow		
-        if ( e.keyCode == 38 ) {
-          if (active.length) {
-            prevAll = active.prevAll("li:visible");
-            if (prevAll.length > 0) {
-              active.removeClass("active");
-              prevAll.eq(0).addClass("active");
-            }            
+          // up arrow		
+          if ( e.keyCode == 38 ) {
+            if (active.length) {
+              prevAll = active.prevAll("li:visible");
+              if (prevAll.length > 0) {
+                active.removeClass("active");
+                prevAll.eq(0).addClass("active");
+              }            
 
-            if ( active.prevAll(":visible").position().top < 0 && scrollValue > 0 ){
-              $datalist.scrollTop(scrollValue-=datalistItemsHeight);                        
-            }                    
+              if ( active.prevAll(":visible").position().top < 0 && scrollValue > 0 ){
+                $datalist.scrollTop(scrollValue-=datalistItemsHeight);                        
+              }                    
+            }
           }
-        }
 
-        // down arrow
-        if ( e.keyCode == 40 ) {
-          if (active.length) {
-            var nextAll = active.nextAll("li:visible");
-            if (nextAll.length > 0) {
-              active.removeClass("active");
-              nextAll.eq(0).addClass("active");
-            }                 
+          // down arrow
+          if ( e.keyCode == 40 ) {
+            if (active.length) {
+              var nextAll = active.nextAll("li:visible");
+              if (nextAll.length > 0) {
+                active.removeClass("active");
+                nextAll.eq(0).addClass("active");
+              }                 
 
-            if ( active.nextAll(":visible").position().top == datalistHeight ){
-              $datalist.scrollTop(scrollValue+=datalistItemsHeight);                      
-            }                    
-          } else {			    
+              if ( active.nextAll(":visible").position().top == datalistHeight ){
+                $datalist.scrollTop(scrollValue+=datalistItemsHeight);                      
+              }                    
+            } else {			    
+              datalistItems.removeClass("active");
+              $datalist.find("li:visible:first").addClass("active");	
+            }		    
+          }
+
+          // return or tab key
+          if ( e.keyCode == 13 || e.keyCode == 9 ) {
+            var active = $("li.active");
+            if (active.length) {
+              $input.val(active.text());
+            }
+            $datalist.fadeOut(options.fadeOutSpeed);
             datalistItems.removeClass("active");
-            $datalist.find("li:visible:first").addClass("active");	
-          }		    
-        }
+          }
 
-        // return or tab key
-        if ( e.keyCode == 13 || e.keyCode == 9 ) {
+          // keys
+          if ( e.keyCode != 13 && e.keyCode != 38 && e.keyCode != 40 ){
+            // Reset active class
+            datalistItems.removeClass("active");
+            $datalist.find("li:visible:first").addClass("active");
+
+            // Reset scroll
+            $datalist.scrollTop(0);	
+            scrollValue = 0;		    
+          }
+
+        });
+
+        // When choosing from dropdown
+        datalistItems.on("click", function() {
           var active = $("li.active");
           if (active.length) {
-            $input.val(active.text());
+            $input.val($(this).text());
           }
           $datalist.fadeOut(options.fadeOutSpeed);
           datalistItems.removeClass("active");
-        }
-
-        // keys
-        if ( e.keyCode != 13 && e.keyCode != 38 && e.keyCode != 40 ){
-          // Reset active class
-          datalistItems.removeClass("active");
-          $datalist.find("li:visible:first").addClass("active");
-
-          // Reset scroll
-          $datalist.scrollTop(0);	
-          scrollValue = 0;		    
-        }
-
-      });
-
-      // When choosing from dropdown
-      datalistItems.on("click", function() {
-        var active = $("li.active");
-        if (active.length) {
-          $input.val($(this).text());
-        }
-        $datalist.fadeOut(options.fadeOutSpeed);
-        datalistItems.removeClass("active");
-      });
+        });
 
       } // end if
     });
