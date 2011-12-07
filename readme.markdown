@@ -65,6 +65,5 @@ Using the Plugin
 
 ###TODO
 
-- Would probably be better to only conditionally load the jQuery plugin if the Modernizr test fails
 - Better IE styling (drop shadows don't work)
-- Might be able to remove Modernizr and just test for support of list attribute in element
+- Remove Modernizr and jQuery dependancies (make totally standalone)
