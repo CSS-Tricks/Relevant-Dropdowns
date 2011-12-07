@@ -42,7 +42,9 @@
         // Fill new fake datalist
         datalistItems.each(function() {
           $("<li />", {
-            "text": $(this).val()
+						// .val is required here, not .text or .html
+						// HTML *needs* to be <option value="xxx"> not <option>xxx</option>  (IE)
+            "text": $(this).val()   
           }).appendTo($datalist);
         });
 
@@ -57,7 +59,6 @@
             scrollValue = 0;
           })    		
           .on("blur", function() {
-
             // If this fires immediately, it prevents click-to-select from working
             setTimeout(function() {
               $datalist.fadeOut(options.fadeOutSpeed);
@@ -66,7 +67,6 @@
           })
           .on("keyup focus", function(e) {
             searchPosition = $input.position();
-
             // Build datalist							
             $datalist
               .show()
@@ -144,7 +144,7 @@
           }
 
           // return or tab key
-          if ( e.keyCode == 13 || e.keyCode == 9 ) {
+          if ( e.keyCode == 13 || e.keyCode == 9 ){
             if (active.length) {
               $input.val(active.text());
               item_selected(active.text());
