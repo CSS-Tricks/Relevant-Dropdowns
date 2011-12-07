@@ -31,7 +31,7 @@ Datalist browser support (Dec 2011) is Firefox 4+, Opera 10.6+, and IE 10. It's 
 	  test : (!Modernizr.input.list || (parseInt($.browser.version) > 400)),
 	  yep : [
 	      'js/jquery.relevant-dropdown.js',
-				'js/load-fallbacks.js'
+	      'js/load-fallbacks.js'
 	  ]
 	});
 </script>
