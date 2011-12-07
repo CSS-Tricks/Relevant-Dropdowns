@@ -86,16 +86,18 @@
 	</div>
 	
 	<script src="js/jquery-1.7.1.js"></script>
-	<script src="js/modernizr.custom.50983.js"></script>
-	<script src="js/jquery.relevant-dropdown.js"></script>
+	<script src="js/modernizr.custom.95508.js"></script>
 	<script>
-	  
-    $('#search').relevantDropdown();
-    
-    $('#name').relevantDropdown({
-      fadeOutSpeed: 0
-    });
-	  
+		// Safari reports success of list attribute, so doing ghetto detection instead
+		yepnope({
+		  test : (!Modernizr.input.list || (parseInt($.browser.version) > 400)),
+		  yep : [
+		      'js/jquery.relevant-dropdown.js',
+					'js/load-fallbacks.js'
+		  ]
+		});
 	</script>
+	
 </body>
+
 </html>
