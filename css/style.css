@@ -1,0 +1,64 @@
+/*
+	 CSS-Tricks Example
+	 by Chris Coyier
+	 http://css-tricks.com
+*/
+
+* { 
+	margin: 0; 
+	padding: 0; 
+}
+body { 
+	font: 14px/1.4 Georgia, Serif;
+	background: #999; 
+}
+
+#page-wrap { 
+	width: 760px; 
+	margin: 80px auto; 
+	background: white;
+	padding: 50px;
+	border: 50px solid #888; 
+}
+
+h1, h2 {
+	font: bold 50px Sans-Serif;
+	letter-spacing: -2px;
+}
+h2 {
+	font-size: 24px;
+	margin: 40px -50px 40px;
+	padding: 10px 50px;
+	letter-spacing: -1px;
+	background: #ffcc00;
+}
+p {
+	margin: 0 0 40px 0;
+}
+p:last-child { margin-bottom: 0; }
+
+input {
+	font: 16px "Lucida Grande", Sans-Serif;
+}
+.datalist {
+	list-style: none;
+	display: none;
+	background: white;
+	box-shadow: 0 2px 2px #999;
+	position: absolute;
+	left: 0;
+	top: 0;
+	max-height: 300px;
+	overflow-y: auto;
+}
+.datalist:empty {
+	display: none !important;
+}
+.datalist li {
+	padding: 3px;
+	font: 13px "Lucida Grande", Sans-Serif;
+}
+.datalist li.active {
+	background: #3875d7;
+	color: white;
+}
