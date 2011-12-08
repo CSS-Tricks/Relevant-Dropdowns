@@ -21,7 +21,11 @@
           datalistItems = $datalist.find("option"),
 
           searchPosition,
-          scrollValue = 0;
+          scrollValue = 0,
+          
+          // Used to prevent reflow
+          temp_items = document.createDocumentFragment(),
+          temp_item = null;
 
       // Insert home for new fake datalist
       $("<ul />", {
@@ -33,16 +37,18 @@
       $datalist.remove();
 
       // Update pointer
-      var $datalist = $("#" + list_id);
+      $datalist = $("#" + list_id);
 
       // Fill new fake datalist
       datalistItems.each(function() {
-        $("<li />", {
+        temp_item = $("<li />", {
 				// .val is required here, not .text or .html
 				// HTML *needs* to be <option value="xxx"> not <option>xxx</option>  (IE)
           "text": $(this).val()   
-        }).appendTo($datalist);
+        })[0];
+        temp_items.appendChild(temp_item);
       });
+      $datalist.append(temp_items);
 
       // Update pointer
       datalistItems = $datalist.find("li");
