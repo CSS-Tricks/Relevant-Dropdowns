@@ -15,17 +15,11 @@
   $.expr[':'].RD_contains = function(a, i, m) { 
     return $(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0; 
   };
-
-  $.fn.relevantDropdown = function(options) {
-
-    options = $.extend({
-      fadeOutSpeed: 'normal', // speed to fade out the dataList Popup
-      change: null
-    }, options);
-    
-    // Check Datalist Support
-    if ( !supportDatalist ) {
-      return this.each(function() {
+  
+  if ( !supportDatalist ) {
+    window.relevantDropdown = (function() {
+      
+      $('input[list]').each(function() {
 
         var $input = $(this),
             list_id = $input.attr('list'),
@@ -75,7 +69,7 @@
           .on("blur", function() {
             // If this fires immediately, it prevents click-to-select from working
             setTimeout(function() {
-              $datalist.fadeOut(options.fadeOutSpeed);
+              $datalist.fadeOut();
               datalistItems.removeClass("active"); 
             }, 500);
           })
@@ -163,7 +157,7 @@
               $input.val(active.text());
               item_selected(active.text());
             }
-            $datalist.fadeOut(options.fadeOutSpeed);
+            $datalist.fadeOut();
             datalistItems.removeClass("active");
           }
 
@@ -186,18 +180,13 @@
           if (active.length) {
             $input.val($(this).text());
           }
-          $datalist.fadeOut(options.fadeOutSpeed);
+          $datalist.fadeOut();
           datalistItems.removeClass("active");
-          item_selected($(this).text());
         });
 
-        function item_selected(new_text) {
-          if( typeof options.change === 'function' )
-            options.change.call(this, new_text);
-        }
-
       });
-    }
-    
-  };
+      
+    })();
+  } 
+  
 })(jQuery);
