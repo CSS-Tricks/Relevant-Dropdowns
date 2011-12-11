@@ -1,126 +1,106 @@
 (function($) {
+  // Check <datalist> and input[list] support
+  var supportDatalist = (function(){
+    var options     = 'options' in document.createElement('datalist');
+    var listoptions = ('list' in document.createElement('input') && 'options' in document.createElement('datalist'));
+    var globalobj   = !!window.HTMLDataListElement;
+    var shivglobobj = !!(document.createElement('datalist') && window.HTMLDataListElement);
+
+    if ( options && listoptions && globalobj && shivglobobj )
+        return true;	        
+  })();    
 
   // Make jQuery's :contains case insensitive (like HTML5 datalist)
   // Changed the name to prevent overriding original functionality
   $.expr[':'].RD_contains = function(a, i, m) { 
     return $(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0; 
   };
+        
+  function RD ( datalist ) {    
+         
+    this.datalistElem   = datalist;
+    this.listID         = this.datalistElem.attr('id');
+    this.inputElem      = $(' input[ list=' + this.listID + ' ] ');
+    this.datalistItems  = this.datalistElem.find('option');
+    
+    this.inputPosition  = 0;
+    this.scrollValue    = 0;    
+    
+    this.activeClass    = "RD_active";
+    
+    var self = this;
 
-  $.fn.relevantDropdown = function(options) {
+    // Used to prevent reflow
+    var temp_items = document.createDocumentFragment();
+    var temp_item = null;
 
-    options = $.extend({
-      fadeOutSpeed: 'normal', // speed to fade out the dataList Popup
-      change: null
-    }, options);
+    // Insert home for new fake datalist
+    $("<ul />", {
+      "class": "RD_datalist",
+      "id"   : this.listID
+    }).appendTo("body");
 
-    return this.each(function() {
+    // Remove old datalist
+    this.datalistElem.remove();
 
-      var $input = $(this),
-          list_id = $input.attr('list'),
-          $datalist = $("#" + list_id),
-          datalistItems = $datalist.find("option"),
+    // Update pointer
+    this.datalistElem = $("#" + this.listID);
+    
+    // Set datalist CSS        
+    this.setCSS();        
+    
+    // Fill new fake datalist
+    this.datalistItems.each(function() {
+      temp_item = $("<li />", {
+			// .val is required here, not .text or .html
+			// HTML *needs* to be <option value="xxx"> not <option>xxx</option>  (IE)
+        "text": $(this).val()   
+      })[0];
+      temp_items.appendChild(temp_item);
+    });
+    this.datalistElem.append(temp_items);
 
-          searchPosition,
-          scrollValue = 0,
-          
-          // Used to prevent reflow
-          temp_items = document.createDocumentFragment(),
-          temp_item = null;
+    // Update pointer
+    this.datalistItems = this.datalistElem.find('li');
 
-      // Insert home for new fake datalist
-      $("<ul />", {
-        "class": "datalist",
-        "id"   : list_id
-      }).appendTo("body");
-
-      // Remove old datalist
-      $datalist.remove();
-
-      // Update pointer
-      $datalist = $("#" + list_id);
-
-      // Fill new fake datalist
-      datalistItems.each(function() {
-        temp_item = $("<li />", {
-				// .val is required here, not .text or .html
-				// HTML *needs* to be <option value="xxx"> not <option>xxx</option>  (IE)
-          "text": $(this).val()   
-        })[0];
-        temp_items.appendChild(temp_item);
-      });
-      $datalist.append(temp_items);
-
-      // Update pointer
-      datalistItems = $datalist.find("li");
-
-      // Typey type type
-      $input
-        .on("focus", function() {   					
-          // Reset scroll				
-          $datalist.scrollTop(0);    					
-          scrollValue = 0;
-        })    		
-        .on("blur", function() {
-          // If this fires immediately, it prevents click-to-select from working
-          setTimeout(function() {
-            $datalist.fadeOut(options.fadeOutSpeed);
-            datalistItems.removeClass("active"); 
-          }, 500);
-        })
-        .on("keyup focus", function(e) {
-          searchPosition = $input.position();
-          // Build datalist							
-          $datalist
-            .show()
-            .css({
-              top: searchPosition.top + $(this).outerHeight(),
-              left: searchPosition.left,
-              width: $input.outerWidth()
-            });
-
-          datalistItems.hide();
-          $datalist.find("li:RD_contains('" + $input.val() + "')").show();    				
-        });
-
-      // Don't want to use :hover in CSS so doing this instead
-      // really helps with arrow key navigation
-      datalistItems
-        .on("mouseenter", function() {
-          $(this).addClass("active").siblings().removeClass("active");
-        })
-        .on("mouseleave", function() {
-          $(this).removeClass("active");
-        });
-
-      // Window resize
-      $(window).resize(function() {
-        searchPosition = $input.position();
-        $datalist
-          .css({
-            top: searchPosition.top + $(this).outerHeight(),
-            left: searchPosition.left,
-            width: $input.outerWidth()
-          });
-      });		
-
+    // Typey type type
+    this.inputElem
+      .on('focus', function(){
+        self.resetScroll();
+      })    		
+      .on('blur', function() {
+        // If this fires immediately, setTimeout prevents click-to-select from working
+        setTimeout(function() {
+          self.hideIt();
+        }, 500);
+      })
+      .on('keyup focus', function(e) {
+        // Show datalist							
+        self.datalistElem.show();
+        
+        // Search for
+        self.datalistItems
+          .hide()
+          .filter(':RD_contains("' + self.inputElem.val() + '")').show();    				
+      })
       // Watch arrow keys for up and down
-      $input.on("keydown", function(e) {	
+      .on('keydown', function(e) {	
 
-        var active = $("li.active"),
-            datalistHeight = $datalist.outerHeight(),
-            datalistItemsHeight = datalistItems.outerHeight();
+        var active = self.getActive();
+        var datalistHeight = self.datalistElem.outerHeight();
+        var datalistItemsHeight = self.datalistItems.outerHeight();
 
         // up arrow		
         if ( e.keyCode == 38 ) {
           if (active.length) {
             prevAll = active.prevAll("li:visible");
             if (prevAll.length > 0) {
-              active.removeClass("active");
-              prevAll.eq(0).addClass("active");
+              active.removeClass(self.activeClass);
+              prevAll.eq(0).addClass(self.activeClass);
             }            
-            
-            if ( prevAll.length && prevAll.position().top < 0 && scrollValue > 0 ){
-              $datalist.scrollTop(scrollValue-=datalistItemsHeight);                        
+
+            if ( prevAll.length && prevAll.position().top < 0 && self.scrollValue > 0 ){
+              self.datalistElem.scrollTop(self.scrollValue-=datalistItemsHeight);                        
             }                    
           }
         }
@@ -130,60 +110,103 @@
           if (active.length) {
             var nextAll = active.nextAll("li:visible");
             if (nextAll.length > 0) {
-              active.removeClass("active");
-              nextAll.eq(0).addClass("active");
+              active.removeClass(self.activeClass);
+              nextAll.eq(0).addClass(self.activeClass);
             }                 
-            
+
             if ( nextAll.length && (nextAll.position().top + datalistItemsHeight) >= datalistHeight ){
-              $datalist.stop().animate({
-                scrollTop: scrollValue += datalistItemsHeight
-              }, 200);
+              self.datalistElem.scrollTop(self.scrollValue+=datalistItemsHeight);
             }                    
           } else {			    
-            datalistItems.removeClass("active");
-            $datalist.find("li:visible:first").addClass("active");	
+            self.datalistItems.removeClass(self.activeClass);
+            self.datalistElem.find("li:visible:first").addClass(self.activeClass);	
           }		    
         }
 
         // return or tab key
         if ( e.keyCode == 13 || e.keyCode == 9 ){
           if (active.length) {
-            $input.val(active.text());
-            item_selected(active.text());
+            self.setValue( active.text() );
           }
-          $datalist.fadeOut(options.fadeOutSpeed);
-          datalistItems.removeClass("active");
+          self.hideIt();
         }
 
         // keys
         if ( e.keyCode != 13 && e.keyCode != 38 && e.keyCode != 40 ){
           // Reset active class
-          datalistItems.removeClass("active");
-          $datalist.find("li:visible:first").addClass("active");
+          self.datalistItems.removeClass(self.activeClass);
+          self.datalistElem.find("li:visible:first").addClass(self.activeClass);
 
-          // Reset scroll
-          $datalist.scrollTop(0);	
-          scrollValue = 0;		    
+          self.resetScroll();		    
         }
 
       });
 
+    // Don't want to use :hover in CSS so doing this instead
+    // really helps with arrow key navigation
+    this.datalistItems
+      .on('mouseenter', function() {
+        $(this).addClass(self.activeClass).siblings().removeClass(self.activeClass);
+      })
+      .on('mouseleave', function() {
+        $(this).removeClass(self.activeClass);
+      })
       // When choosing from dropdown
-      datalistItems.on("click", function() {
-        var active = $("li.active");
+      .on("click", function() {
+       var active = self.getActive();
+       
         if (active.length) {
-          $input.val($(this).text());
+          self.setValue( $(this).text() );
         }
-        $datalist.fadeOut(options.fadeOutSpeed);
-        datalistItems.removeClass("active");
-        item_selected($(this).text());
+        self.hideIt();
       });
-      
-      function item_selected(new_text) {
-        if( typeof options.change === 'function' )
-          options.change.call(this, new_text);
-      }
 
+    // Window resize
+    $(window).resize(function() {   
+      self.setCSS();
+    });		
+
+  }// end RD
+
+  // Set datalist CSS
+  RD.prototype.setCSS = function () { 
+    this.datalistElem.css({
+      top: this.inputElem.position().top + this.inputElem.outerHeight(),
+      left: this.inputElem.position().left,
+      width: this.inputElem.outerWidth()
     });
-  };
+  }
+  
+  // Get active element
+  RD.prototype.getActive = function() {
+    return this.datalistElem.find('.' + this.activeClass);
+  }
+  
+  // Set input value
+  RD.prototype.setValue = function( value ) {
+    this.inputElem.val( value );
+  }
+  
+  // Hide datalist
+  RD.prototype.hideIt = function () { 
+    this.datalistElem.fadeOut();
+    this.datalistItems.removeClass(this.activeClass); 
+  }
+
+  // Reset datalist scroll
+  RD.prototype.resetScroll = function () {
+    this.datalistElem.scrollTop(0);    					
+    this.scrollValue = 0;        
+  }
+  
+  // If don't support datalist
+  if ( !supportDatalist ) {
+    // Each <datalist>
+    $('datalist').each(function() {        
+      if (!$.data(this, 'relevantDropdown')) {
+          $.data(this, 'relevantDropdown', new RD( $(this) ));
+      }
+    });
+  } // endif
+  
 })(jQuery);

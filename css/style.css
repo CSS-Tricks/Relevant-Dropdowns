@@ -40,7 +40,7 @@ p:last-child { margin-bottom: 0; }
 input {
 	font: 16px "Lucida Grande", Sans-Serif;
 }
-.datalist {
+.RD_datalist {
 	list-style: none;
 	display: none;
 	background: white;
@@ -51,14 +51,14 @@ input {
 	max-height: 300px;
 	overflow-y: auto;
 }
-.datalist:empty {
+.RD_datalist:empty {
 	display: none !important;
 }
-.datalist li {
+.RD_datalist li {
 	padding: 3px;
 	font: 13px "Lucida Grande", Sans-Serif;
 }
-.datalist li.active {
+.RD_datalist li.RD_active {
 	background: #3875d7;
 	color: white;
 }
