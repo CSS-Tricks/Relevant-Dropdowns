@@ -19,11 +19,11 @@
   if ( !supportDatalist ) {
     window.relevantDropdown = (function() {
       
-      $('input[list]').each(function() {
+      $('datalist').each(function() {
 
-        var $input = $(this),
-            list_id = $input.attr('list'),
-            $datalist = $("#" + list_id),
+        var $datalist = $(this),
+            list_id = $datalist.attr("id"),
+            $input = $("input[list="+ list_id +"]"),
             datalistItems = $datalist.find("option"),
 
             searchPosition,
@@ -141,9 +141,7 @@
               }                 
 
               if ( nextAll.length && (nextAll.position().top + datalistItemsHeight) >= datalistHeight ){
-                $datalist.stop().animate({
-                  scrollTop: scrollValue += datalistItemsHeight
-                }, 200);
+                $datalist.scrollTop(scrollValue+=datalistItemsHeight);
               }                    
             } else {			    
               datalistItems.removeClass("active");
