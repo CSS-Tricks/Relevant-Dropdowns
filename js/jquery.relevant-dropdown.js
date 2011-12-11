@@ -24,7 +24,9 @@
     this.datalistItems  = this.datalistElem.find('option');
     
     this.inputPosition  = 0;
-    this.scrollValue    = 0;
+    this.scrollValue    = 0;    
+    
+    this.activeClass    = "RD_active";
     
     var self = this;
 
@@ -34,7 +36,7 @@
 
     // Insert home for new fake datalist
     $("<ul />", {
-      "class": "datalist",
+      "class": "RD_datalist",
       "id"   : this.listID
     }).appendTo("body");
 
@@ -93,8 +95,8 @@
           if (active.length) {
             prevAll = active.prevAll("li:visible");
             if (prevAll.length > 0) {
-              active.removeClass("active");
-              prevAll.eq(0).addClass("active");
+              active.removeClass(self.activeClass);
+              prevAll.eq(0).addClass(self.activeClass);
             }            
 
             if ( prevAll.length && prevAll.position().top < 0 && self.scrollValue > 0 ){
@@ -108,16 +110,16 @@
           if (active.length) {
             var nextAll = active.nextAll("li:visible");
             if (nextAll.length > 0) {
-              active.removeClass("active");
-              nextAll.eq(0).addClass("active");
+              active.removeClass(self.activeClass);
+              nextAll.eq(0).addClass(self.activeClass);
             }                 
 
             if ( nextAll.length && (nextAll.position().top + datalistItemsHeight) >= datalistHeight ){
               self.datalistElem.scrollTop(self.scrollValue+=datalistItemsHeight);
             }                    
           } else {			    
-            self.datalistItems.removeClass("active");
-            self.datalistElem.find("li:visible:first").addClass("active");	
+            self.datalistItems.removeClass(self.activeClass);
+            self.datalistElem.find("li:visible:first").addClass(self.activeClass);	
           }		    
         }
 
@@ -132,8 +134,8 @@
         // keys
         if ( e.keyCode != 13 && e.keyCode != 38 && e.keyCode != 40 ){
           // Reset active class
-          self.datalistItems.removeClass("active");
-          self.datalistElem.find("li:visible:first").addClass("active");
+          self.datalistItems.removeClass(self.activeClass);
+          self.datalistElem.find("li:visible:first").addClass(self.activeClass);
 
           self.resetScroll();		    
         }
@@ -144,10 +146,10 @@
     // really helps with arrow key navigation
     this.datalistItems
       .on('mouseenter', function() {
-        $(this).addClass('active').siblings().removeClass('active');
+        $(this).addClass(self.activeClass).siblings().removeClass(self.activeClass);
       })
       .on('mouseleave', function() {
-        $(this).removeClass('active');
+        $(this).removeClass(self.activeClass);
       })
       // When choosing from dropdown
       .on("click", function() {
@@ -177,9 +179,10 @@
   
   // Get active element
   RD.prototype.getActive = function() {
-    return this.datalistElem.find('.active');
+    return this.datalistElem.find('.' + this.activeClass);
   }
   
+  // Set input value
   RD.prototype.setValue = function( value ) {
     this.inputElem.val( value );
   }
@@ -187,7 +190,7 @@
   // Hide datalist
   RD.prototype.hideIt = function () { 
     this.datalistElem.fadeOut();
-    this.datalistItems.removeClass('active'); 
+    this.datalistItems.removeClass(this.activeClass); 
   }
 
   // Reset datalist scroll
