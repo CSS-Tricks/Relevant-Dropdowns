@@ -106,7 +106,7 @@
       // Watch arrow keys for up and down
       $input.on("keydown", function(e) {	
 
-        var active = $("li.active"),
+        var active = $datalist.find("li.active"),
             datalistHeight = $datalist.outerHeight(),
             datalistItemsHeight = datalistItems.outerHeight();
 
