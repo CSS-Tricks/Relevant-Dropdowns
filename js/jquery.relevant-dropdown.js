@@ -2,9 +2,11 @@
 
   // Make jQuery's :contains case insensitive (like HTML5 datalist)
   // Changed the name to prevent overriding original functionality
-  $.expr[':'].RD_contains = function(a, i, m) { 
-    return $(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0; 
-  };
+  $.expr[":"].RD_contains = $.expr.createPseudo(function(arg) {
+      return function( elem ) {
+          return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+      };
+  });
 
   $.fn.relevantDropdown = function(options) {
 
@@ -22,7 +24,7 @@
 
           searchPosition,
           scrollValue = 0,
-          
+
           // Used to prevent reflow
           temp_items = document.createDocumentFragment(),
           temp_item = null;
@@ -44,7 +46,7 @@
         temp_item = $("<li />", {
 				// .val is required here, not .text or .html
 				// HTML *needs* to be <option value="xxx"> not <option>xxx</option>  (IE)
-          "text": $(this).val()   
+          "text": $(this).val()
         })[0];
         temp_items.appendChild(temp_item);
       });
@@ -55,21 +57,21 @@
 
       // Typey type type
       $input
-        .on("focus", function() {   					
-          // Reset scroll				
-          $datalist.scrollTop(0);    					
+        .on("focus", function() {
+          // Reset scroll
+          $datalist.scrollTop(0);
           scrollValue = 0;
-        })    		
+        })
         .on("blur", function() {
           // If this fires immediately, it prevents click-to-select from working
           setTimeout(function() {
             $datalist.fadeOut(options.fadeOutSpeed);
-            datalistItems.removeClass("active"); 
+            datalistItems.removeClass("active");
           }, 500);
         })
         .on("keyup focus", function(e) {
           searchPosition = $input.position();
-          // Build datalist							
+          // Build datalist
           $datalist
             .show()
             .css({
@@ -79,7 +81,7 @@
             });
 
           datalistItems.hide();
-          $datalist.find("li:RD_contains('" + $input.val() + "')").show();    				
+          $datalist.find("li:RD_contains('" + $input.val() + "')").show();
         });
 
       // Don't want to use :hover in CSS so doing this instead
@@ -101,27 +103,27 @@
             left: searchPosition.left,
             width: $input.outerWidth()
           });
-      });		
+      });
 
       // Watch arrow keys for up and down
-      $input.on("keydown", function(e) {	
+      $input.on("keydown", function(e) {
 
         var active = $datalist.find("li.active"),
             datalistHeight = $datalist.outerHeight(),
             datalistItemsHeight = datalistItems.outerHeight();
 
-        // up arrow		
+        // up arrow
         if ( e.keyCode == 38 ) {
           if (active.length) {
             prevAll = active.prevAll("li:visible");
             if (prevAll.length > 0) {
               active.removeClass("active");
               prevAll.eq(0).addClass("active");
-            }            
-            
+            }
+
             if ( prevAll.length && prevAll.position().top < 0 && scrollValue > 0 ){
-              $datalist.scrollTop(scrollValue-=datalistItemsHeight);                        
-            }                    
+              $datalist.scrollTop(scrollValue-=datalistItemsHeight);
+            }
           }
         }
 
@@ -132,17 +134,17 @@
             if (nextAll.length > 0) {
               active.removeClass("active");
               nextAll.eq(0).addClass("active");
-            }                 
-            
+            }
+
             if ( nextAll.length && (nextAll.position().top + datalistItemsHeight) >= datalistHeight ){
               $datalist.stop().animate({
                 scrollTop: scrollValue += datalistItemsHeight
               }, 200);
-            }                    
-          } else {			    
+            }
+          } else {
             datalistItems.removeClass("active");
-            $datalist.find("li:visible:first").addClass("active");	
-          }		    
+            $datalist.find("li:visible:first").addClass("active");
+          }
         }
 
         // return or tab key
@@ -162,8 +164,8 @@
           $datalist.find("li:visible:first").addClass("active");
 
           // Reset scroll
-          $datalist.scrollTop(0);	
-          scrollValue = 0;		    
+          $datalist.scrollTop(0);
+          scrollValue = 0;
         }
 
       });
@@ -178,7 +180,7 @@
         datalistItems.removeClass("active");
         item_selected($(this).text());
       });
-      
+
       function item_selected(new_text) {
         if( typeof options.change === 'function' )
           options.change.call(this, new_text);
