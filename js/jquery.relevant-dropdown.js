@@ -70,7 +70,17 @@
           }, 500);
         })
         .on("keyup focus", function(e) {
-          searchPosition = $input.position();
+
+              // first make sure we have relevant input to add to the user
+              // if all we have to suggest is that value of the input, it is just annoying..
+              var $options = $datalist.find("li:RD_contains('" + $input.val() +  "')" );
+              if ( $options.length == 1 && $options.text() == $input.val() ){
+                  datalistItems.hide();
+                  $datalist.hide();
+                  return;
+              }
+
+          searchPosition = $input.offset();
           // Build datalist
           $datalist
             .show()
@@ -80,8 +90,12 @@
               width: $input.outerWidth()
             });
 
-          datalistItems.hide();
-          $datalist.find("li:RD_contains('" + $input.val() + "')").show();
+           if ( $options.length > 0 ){
+                datalistItems.hide();
+                $options.show();
+           }else if ( datalistItems.length > 0 && $.trim($input.val()) == ""){
+               datalistItems.show();
+           }
         });
 
       // Don't want to use :hover in CSS so doing this instead
@@ -107,6 +121,7 @@
 
       // Watch arrow keys for up and down
       $input.on("keydown", function(e) {
+
 
         var active = $datalist.find("li.active"),
             datalistHeight = $datalist.outerHeight(),
@@ -148,13 +163,16 @@
         }
 
         // return or tab key
-        if ( e.keyCode == 13 || e.keyCode == 9 ){
+        if ( e.keyCode == 13  ){
           if (active.length) {
             $input.val(active.text());
             item_selected(active.text());
+
           }
           $datalist.fadeOut(options.fadeOutSpeed);
           datalistItems.removeClass("active");
+
+            e.stopPropagation(); return false;
         }
 
         // keys
@@ -182,8 +200,10 @@
       });
 
       function item_selected(new_text) {
-        if( typeof options.change === 'function' )
+        if( typeof options.change === 'function' ){
           options.change.call(this, new_text);
+        }
+        $input.trigger('change');
       }
 
     });
