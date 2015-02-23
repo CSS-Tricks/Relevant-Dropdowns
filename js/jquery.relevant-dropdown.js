@@ -29,28 +29,31 @@
           temp_items = document.createDocumentFragment(),
           temp_item = null;
 
-      // Insert home for new fake datalist
-      $("<ul />", {
-        "class": "datalist",
-        "id"   : list_id
-      }).appendTo("body");
-
-      // Remove old datalist
-      $datalist.remove();
-
-      // Update pointer
-      $datalist = $("#" + list_id);
-
-      // Fill new fake datalist
-      datalistItems.each(function() {
-        temp_item = $("<li />", {
-				// .val is required here, not .text or .html
-				// HTML *needs* to be <option value="xxx"> not <option>xxx</option>  (IE)
-          "text": $(this).val()
-        })[0];
-        temp_items.appendChild(temp_item);
-      });
-      $datalist.append(temp_items);
+      // make sure we haven't already converted the datalist
+      if (!$("ul#" + list_id).is($datalist)) {
+          // Insert home for new fake datalist
+          $("<ul />", {
+            "class": "datalist",
+            "id"   : list_id
+          }).appendTo("body");
+    
+          // Remove old datalist
+          $datalist.remove();
+    
+          // Update pointer
+          $datalist = $("#" + list_id);
+    
+          // Fill new fake datalist
+          datalistItems.each(function() {
+            temp_item = $("<li />", {
+    				// .val is required here, not .text or .html
+    				// HTML *needs* to be <option value="xxx"> not <option>xxx</option>  (IE)
+              "text": $(this).val()
+            })[0];
+            temp_items.appendChild(temp_item);
+          });
+          $datalist.append(temp_items);
+      }
 
       // Update pointer
       datalistItems = $datalist.find("li");
