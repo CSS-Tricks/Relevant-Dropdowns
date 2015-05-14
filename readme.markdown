@@ -53,4 +53,4 @@ $('#name').relevantDropdown({
 ###TODO
 
 - Better IE styling (drop shadows don't work)
-- Remove Modernizr and jQuery dependancies (make totally standalone)
+- Remove Modernizr and jQuery dependencies (make totally standalone)
