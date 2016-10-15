@@ -16,7 +16,6 @@
     }, options);
 
     return this.each(function() {
-
       var $input = $(this),
           list_id = $input.attr('list'),
           $datalist = $("#" + list_id),
@@ -35,14 +34,14 @@
           $("<ul />", {
             "class": "datalist",
             "id"   : list_id
-          }).appendTo("body");
-    
+          }).appendTo($input.parent());
+
           // Remove old datalist
           $datalist.remove();
-    
+
           // Update pointer
           $datalist = $("#" + list_id);
-    
+
           // Fill new fake datalist
           datalistItems.each(function() {
             temp_item = $("<li />", {
@@ -74,6 +73,7 @@
         })
         .on("keyup focus", function(e) {
           searchPosition = $input.position();
+
           // Build datalist
           $datalist
             .show()
