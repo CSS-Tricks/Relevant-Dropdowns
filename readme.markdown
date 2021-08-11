@@ -1,10 +1,10 @@
-#Relevant Dropdown
+# Relevant Dropdown
 
-##A HTML5 datalist polyfill that depends on jQuery and Modernizr.
+## A HTML5 datalist polyfill that depends on jQuery and Modernizr.
 
 Datalist browser support (Dec 2011) is Firefox 4+, Opera 10.6+, and IE 10. It's reasonable that you'd want WebKit support. So. This.
 
-###Example HTML5 Markup
+### Example HTML5 Markup
 
 ```html
 <input type="search" list="states" placeholder="Find U.S. State">
@@ -16,14 +16,14 @@ Datalist browser support (Dec 2011) is Firefox 4+, Opera 10.6+, and IE 10. It's 
 </datalist>
 ```
 
-###Include jQuery and Modernizr in head of document
+### Include jQuery and Modernizr in head of document
 
 ```html
 <script src="js/jquery-1.7.1.js"></script>
 <script src="js/modernizr.custom.50983.js"></script>
 ```
 
-###Run the Modernizr test, and load polyfill stuff if needed
+### Run the Modernizr test, and load polyfill stuff if needed
 
 ```html
 <script>
@@ -50,7 +50,7 @@ $('#name').relevantDropdown({
 });
 ```
 
-###TODO
+### TODO
 
 - Better IE styling (drop shadows don't work)
 - Remove Modernizr and jQuery dependencies (make totally standalone)
